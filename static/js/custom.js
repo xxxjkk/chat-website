@@ -177,9 +177,9 @@ $(document).ready(function() {
   });
 
   // 禁止键盘F12键
-  document.addEventListener('keydown',function(e){
-    if(e.key == 'F12'){
-        e.preventDefault(); // 如果按下键F12,阻止事件
-    }
-  });
+//   document.addEventListener('keydown',function(e){
+//     if(e.key == 'F12'){
+//         e.preventDefault(); // 如果按下键F12,阻止事件
+//     }
+//   });
 });
