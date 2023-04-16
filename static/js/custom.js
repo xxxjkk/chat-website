@@ -56,9 +56,23 @@ $(document).ready(function() {
     return div.innerHTML;
   }
 
+    // 添加消息到窗口,对message进行转义，防止html被浏览器渲染
+    function addLoading() {
+        $(".answer .tips").css({"display":"none"});    // 图片隐藏
+        chatInput.val('');
+        var messageElement = $('<div id="loading" class="row message-bubble"><img class="chat-icon" src="./static/images/chatgpt.png"><p class="message-text"><img src="./static/images/loading-1.gif" alt="加载动画"></p></div>');
+        chatWindow.append(messageElement);
+        chatWindow.animate({ scrollTop: chatWindow.prop('scrollHeight') }, 500);
+    }
+
+    // 添加消息到窗口,对message进行转义，防止html被浏览器渲染
+    function deleteLoading() {
+        chatWindow.find('#loading').remove();
+    }
+
   // 添加消息到窗口,对message进行转义，防止html被浏览器渲染
   function addMessage(message,imgName) {
-    $(".answer .tips").css({"display":"none"});    // 打赏卡隐藏
+    $(".answer .tips").css({"display":"none"});    // 图片隐藏
     chatInput.val('');
     var escapedMessage = escapeHtml(message);
     var messageElement = $('<div class="row message-bubble"><img class="chat-icon" src="./static/images/' + imgName + '"><p class="message-text">' +  escapedMessage + '</p></div>');
@@ -69,7 +83,7 @@ $(document).ready(function() {
 
   // 请求失败不用转义html
   function addFailMessage(message) {
-    $(".answer .tips").css({"display":"none"});      // 打赏卡隐藏
+    $(".answer .tips").css({"display":"none"});      // 图片隐藏
     chatInput.val('');
     var messageElement = $('<div class="row message-bubble"><img class="chat-icon" src="./static/images/chatgpt.png"><p class="message-text">' +  message + '</p></div>');
     chatWindow.append(messageElement);
@@ -99,7 +113,6 @@ $(document).ready(function() {
       }else{
         data.apiKey = apiKey
       }
-
     }
 
     var message = chatInput.val();
@@ -125,6 +138,9 @@ $(document).ready(function() {
 
     console.log(data);
 
+    // 出现loading动画
+    addLoading();
+
     // 发送信息到后台
     $.ajax({
       url: 'https://open.aiproxy.xyz/v1/chat/completions',
@@ -149,10 +165,15 @@ $(document).ready(function() {
         chatBtn.attr('disabled',false)
         // 重新绑定键盘事件
         chatInput.on("keydown",handleEnter);
+        // 去除loading动画
+        deleteLoading()
         // 将回复添加到数组
         messages.push(resp)
       },
       error: function(jqXHR, textStatus, errorThrown) {
+        // 去除loading动画
+        deleteLoading()
+
         addFailMessage('<span style="color:red;">' + '出错啦！请稍后再试!' + '</span>');
         chatBtn.attr('disabled',false)
         chatInput.on("keydown",handleEnter);
@@ -177,9 +198,9 @@ $(document).ready(function() {
   });
 
   // 禁止键盘F12键
-//   document.addEventListener('keydown',function(e){
-//     if(e.key == 'F12'){
-//         e.preventDefault(); // 如果按下键F12,阻止事件
-//     }
-//   });
+  document.addEventListener('keydown',function(e){
+    if(e.key == 'F12'){
+        e.preventDefault(); // 如果按下键F12,阻止事件
+    }
+  });
 });
