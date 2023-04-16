@@ -1,7 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+  <script>
+  var password = ""
+  var realpassword = atob("NjY4OA==")
+  password = prompt('请输入密码 (本网站需输入密码才可进入):', '')
+  if (password != realpassword) {
+    alert("密码不正确,无法进入本站!!")
+    // window.opener = nullwindow.close()
+    open(location, '_self').close()
+  }  // 密码不正确就关闭//
+  </script>
+
+  <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="images/x-icon" href="./static/images/favicon.ico">
